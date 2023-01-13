@@ -7,6 +7,54 @@
   pointer-events: none;
 }
 
+.imageHeight {
+  /* height: 85vh;
+  padding: "20px"; */
+  position: relative;
+}
+
+.imageHeight img {
+  /* height: 85vh; */
+}
+
+.footerSet {
+  position: "fixed";
+  bottom: 0;
+}
+
+.zoomDiv {
+  background-color: #3c4257;
+  /* width: "100px";
+  height: "100px"; */
+  /* padding-top: 5px;
+  padding-bottom: 5px; */
+}
+
+.imageHeight .navigation {
+  position: absolute;
+  top: 50%;
+  z-index: 2;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.react-transform-component {
+  justify-content: center;
+  /* min-width: 400px !important;
+  max-width: 400px !important; */
+}
+
+/* Next & previous buttons */
+.prev {
+  left: -15%;
+}
+
+.next {
+  right: -15%;
+}
+
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {
     animation: App-logo-spin infinite 20s linear;
@@ -35,4 +83,13 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+.konvajs-content canvas {
+  /* height: 100vh !important;
+  width: 100% !important; */
+}
+
+.konva-height {
+  height: 500px;
 }
