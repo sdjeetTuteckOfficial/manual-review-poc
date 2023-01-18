@@ -8,32 +8,34 @@
 }
 
 .imageHeight {
-  /* height: 85vh;
-  padding: "20px"; */
+  height: 85vh;
   position: relative;
+  display: flex;
+  align-items: center;
+  object-fit: cover;
+  z-index: 999;
 }
-
-.imageHeight img {
-  /* height: 85vh; */
+*/ .imageHeight img {
+  height: 85vh;
 }
 
 .footerSet {
   position: "fixed";
   bottom: 0;
 }
-
 .zoomDiv {
   background-color: #3c4257;
-  /* width: "100px";
-  height: "100px"; */
-  /* padding-top: 5px;
-  padding-bottom: 5px; */
+  width: "100px";
+  height: "100px";
+  padding-top: 5px;
+  padding-bottom: 5px;
+  z-index: 1;
 }
 
 .imageHeight .navigation {
   position: absolute;
   top: 50%;
-  z-index: 2;
+  z-index: -1;
   width: 100%;
   display: flex;
   align-items: center;
@@ -42,8 +44,8 @@
 
 .react-transform-component {
   justify-content: center;
-  /* min-width: 400px !important;
-  max-width: 400px !important; */
+  min-width: 400px !important;
+  max-width: 400px !important;
 }
 
 /* Next & previous buttons */
@@ -85,11 +87,11 @@
   }
 }
 
-.konvajs-content canvas {
-  /* height: 100vh !important;
-  width: 100% !important; */
+/* .konvajs-content canvas {
+  height: 100vh !important;
+  width: 100% !important;
 }
 
 .konva-height {
   height: 500px;
-}
+} */

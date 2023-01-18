@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 import screenshot from "./../assets/screenshot.svg";
 import { Grid, IconButton, Button, Box } from "@mui/material";
@@ -12,11 +12,15 @@ import arrowRight from "../assets/arrowrt.svg";
 import Annotator from "../Annotation/Annotation";
 import Annotate from "../KonvaAnnotation/Annotate";
 import { useDispatch, useSelector } from "react-redux";
+import { styled } from "@mui/material/styles";
 import { test } from "../Redux/action";
 function ZoomPinch() {
   const images = useSelector((state) => state.ManualReviewReducers.data);
   const imageRef = useRef();
+  const divRef = useRef();
   const dispatch = useDispatch();
+  const [width, setWidth] = useState();
+  const [height, setHeight] = useState();
   const [currentImageId, setCurrentImageId] = useState(1);
   const [scale, setScale] = useState(1);
   const currentImage = images.find((image) => image.id === currentImageId);
@@ -36,6 +40,16 @@ function ZoomPinch() {
     setCurrentImageId(images[previousIndex].id);
   };
 
+  useEffect(() => {
+    if (divRef.current) {
+      let height = divRef.current.offsetHeight;
+      let width = divRef.current.offsetWidth;
+      setHeight(height);
+      setWidth(width);
+      console.log("I cant sleep", height, width);
+    }
+  }, [divRef, width, height]);
+
   return (
     <>
       <TransformWrapper
@@ -46,38 +60,37 @@ function ZoomPinch() {
       >
         {({ zoomIn, zoomOut, resetTransform, ...rest }) => (
           <React.Fragment>
-            {/* <Grid container justifyContent="center" sx={{ mt: 2 }}> */}
-            {/* <div className="imageHeight"> */}
-            <TransformComponent
-              className="transformDiv"
-              style={{
-                justifyContent: "center",
-                // width: "400px",
-                // maxHeight: "80vh",
-              }}
+            <Grid
+              container
+              justifyContent="center"
+              alignItems="center"
+              sx={{ mt: 2 }}
             >
-              {/* <Annotator image={currentImage.url} /> */}
-              <Annotate image="" />
-            </TransformComponent>
+              <div className="imageHeight" ref={divRef}>
+                <TransformComponent>
+                  {/* <Annotator image="https://i.ibb.co/2gb0zbx/Microsoft-Teams-image.jpg" /> */}
 
-            <Box className="navigation">
-              <IconButton className="prev" onClick={previousImage}>
-                <img
-                  src={previous}
-                  alt="prev"
-                  style={{ width: "20px", height: "20px" }}
-                />
-              </IconButton>
-              <IconButton className="next" onClick={nextImage}>
-                <img
-                  src={next}
-                  alt="next"
-                  style={{ width: "20px", height: "20px" }}
-                />
-              </IconButton>
-            </Box>
-            {/* </div> */}
-            {/* </Grid> */}
+                  <Annotate image="" width={width} height={height} />
+                </TransformComponent>
+
+                <Box className="navigation">
+                  <IconButton className="prev" onClick={previousImage}>
+                    <img
+                      src={previous}
+                      alt="prev"
+                      style={{ width: "20px", height: "20px" }}
+                    />
+                  </IconButton>
+                  <IconButton className="next" onClick={nextImage}>
+                    <img
+                      src={next}
+                      alt="next"
+                      style={{ width: "20px", height: "20px" }}
+                    />
+                  </IconButton>
+                </Box>
+              </div>
+            </Grid>
 
             <footer className="footerSet">
               <Grid
@@ -97,7 +110,7 @@ function ZoomPinch() {
                 </Grid>
                 <Grid item md={4}>
                   <Grid container justifyContent="center">
-                    {/* <div className="zoomDiv">
+                    <div className="zoomDiv">
                       <IconButton
                         color="primary"
                         aria-label="zoom in"
@@ -122,10 +135,10 @@ function ZoomPinch() {
                       >
                         <img src={center} alt="center" />
                       </IconButton>
-                    </div> */}
-                    <Button onClick={() => dispatch(test("hiiiiiiiiiiiii"))}>
+                    </div>
+                    {/* <Button onClick={() => dispatch(test("hiiiiiiiiiiiii"))}>
                       Redux😎
-                    </Button>
+                    </Button> */}
                   </Grid>
                 </Grid>
                 <Grid item md={4}>

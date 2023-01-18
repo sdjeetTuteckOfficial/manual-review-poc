@@ -1,7 +1,15 @@
 import React, { useEffect } from "react";
 import { Rect, Transformer } from "react-konva";
 
-const Annotation = ({ shapeProps, isSelected, onSelect, onChange }) => {
+const Annotation = ({
+  shapeProps,
+  isSelected,
+  onSelect,
+  onChange,
+  scale,
+  imageWidth,
+  imageHeight,
+}) => {
   const shapeRef = React.useRef();
   const transformRef = React.useRef();
 

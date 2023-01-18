@@ -7,6 +7,9 @@ const ImageFromUrl = ({
   onMouseDown,
   onMouseUp,
   onMouseMove,
+  width,
+  height,
+  scale,
 }) => {
   const [image, setImage] = useState(null);
 
@@ -27,8 +30,10 @@ const ImageFromUrl = ({
   return (
     <Image
       image={image}
-      width={1394}
-      height={2047}
+      width={width}
+      height={height}
+      scaleX={scale}
+      scaleY={scale}
       onMouseDown={onMouseDown}
       onMouseMove={onMouseMove}
       onMouseUp={onMouseUp}
