@@ -16,6 +16,7 @@ const ImageFromUrl = ({
   useEffect(() => {
     const imageToLoad = new window.Image();
     imageToLoad.src = imageUrl;
+
     imageToLoad.addEventListener("load", () => {
       setImage(imageToLoad);
       setCanvasMeasures({

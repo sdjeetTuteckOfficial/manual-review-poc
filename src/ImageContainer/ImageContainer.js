@@ -22,6 +22,7 @@ function ZoomPinch() {
   const [width, setWidth] = useState();
   const [height, setHeight] = useState();
   const [currentImageId, setCurrentImageId] = useState(1);
+  const imageToLoad = new window.Image();
   const [scale, setScale] = useState(1);
   const currentImage = images.find((image) => image.id === currentImageId);
 
@@ -41,11 +42,26 @@ function ZoomPinch() {
   };
 
   useEffect(() => {
+    let height, width;
+    let imageHeight;
+    imageToLoad.src = "https://i.ibb.co/2gb0zbx/Microsoft-Teams-image.jpg";
+
+    console.log("heyyyyyyyy", imageToLoad.height);
+    // imageToLoad.addEventListener("load", () => {
+    //   imageHeight = imageToLoad.height;
+    // });
     if (divRef.current) {
-      let height = divRef.current.offsetHeight;
-      let width = divRef.current.offsetWidth;
-      setHeight(height);
-      setWidth(width);
+      height = divRef.current.offsetHeight;
+      width = divRef.current.offsetWidth;
+      console.log("misery to be solve", imageToLoad.height, height);
+      if (imageToLoad.height < height) {
+        setHeight(imageToLoad.height);
+        setWidth(width);
+      } else {
+        setHeight(height);
+        setWidth(width);
+      }
+
       console.log("I cant sleep", height, width);
     }
   }, [divRef, width, height]);
