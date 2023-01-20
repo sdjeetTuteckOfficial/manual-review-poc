@@ -8,7 +8,7 @@ export const test = (data) => {
   };
 };
 
-export const addCorordinates = (data) => {
+export const addNewCorordinates = (data) => {
   console.log(data);
   return {
     type: "ADD_COORDINATES",

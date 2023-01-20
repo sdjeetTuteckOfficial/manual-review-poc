@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Image } from "react-konva";
+import useImage from "use-image";
 
 const ImageFromUrl = ({
   imageUrl,
@@ -9,32 +10,26 @@ const ImageFromUrl = ({
   onMouseMove,
   width,
   height,
-  scale,
 }) => {
   const [image, setImage] = useState(null);
-
+  // const image = useImage(imageUrl);
   useEffect(() => {
-    const imageToLoad = new window.Image();
-    imageToLoad.src = imageUrl;
-
-    imageToLoad.addEventListener("load", () => {
-      setImage(imageToLoad);
-      setCanvasMeasures({
-        width: imageToLoad.width,
-        height: imageToLoad.height,
-      });
+    const imageLoad = new window.Image();
+    imageLoad.src = imageUrl;
+    console.log("imageUrl", imageUrl);
+    imageLoad.addEventListener("load", () => {
+      setImage(imageLoad);
+      console.log("loggging");
     });
 
-    return () => imageToLoad.removeEventListener("load", null);
-  }, [imageUrl, setImage, setCanvasMeasures]);
+    return () => imageLoad.removeEventListener("load", null);
+  }, [imageUrl]);
 
   return (
     <Image
       image={image}
       width={width}
       height={height}
-      scaleX={scale}
-      scaleY={scale}
       onMouseDown={onMouseDown}
       onMouseMove={onMouseMove}
       onMouseUp={onMouseUp}

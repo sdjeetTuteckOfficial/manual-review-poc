@@ -1,6 +1,5 @@
 import React, { useRef, useState, useEffect } from "react";
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
-import screenshot from "./../assets/screenshot.svg";
 import { Grid, IconButton, Button, Box } from "@mui/material";
 import add from "../assets/add.svg";
 import substract from "../assets/substract.svg";
@@ -9,62 +8,61 @@ import next from "../assets/next.svg";
 import center from "../assets/center.svg";
 import arrowLeft from "../assets/arrowlft.svg";
 import arrowRight from "../assets/arrowrt.svg";
-import Annotator from "../Annotation/Annotation";
 import Annotate from "../KonvaAnnotation/Annotate";
 import { useDispatch, useSelector } from "react-redux";
 import { styled } from "@mui/material/styles";
 import { test } from "../Redux/action";
 function ZoomPinch() {
-  const images = useSelector((state) => state.ManualReviewReducers.data);
-  const imageRef = useRef();
+  const annotedData = useSelector((state) => state.ManualReviewReducers.data);
   const divRef = useRef();
   const dispatch = useDispatch();
   const [width, setWidth] = useState();
   const [height, setHeight] = useState();
-  const [currentImageId, setCurrentImageId] = useState(1);
+  const [currentImageId, setCurrentImageId] = useState(annotedData[0].id);
   const imageToLoad = new window.Image();
   const [scale, setScale] = useState(1);
-  const currentImage = images.find((image) => image.id === currentImageId);
+  const currentImage = annotedData.find((image) => image.id === currentImageId);
 
   const nextImage = () => {
-    const currentIndex = images.findIndex(
+    const currentIndex = annotedData.findIndex(
       (image) => image.id === currentImageId
     );
-    const nextIndex = (currentIndex + 1) % images.length;
-    setCurrentImageId(images[nextIndex].id);
+    const nextIndex = (currentIndex + 1) % annotedData.length;
+    setCurrentImageId(annotedData[nextIndex].id);
   };
   const previousImage = () => {
-    const currentIndex = images.findIndex(
+    const currentIndex = annotedData.findIndex(
       (image) => image.id === currentImageId
     );
-    const previousIndex = (currentIndex + images.length - 1) % images.length;
-    setCurrentImageId(images[previousIndex].id);
+    const previousIndex =
+      (currentIndex + annotedData.length - 1) % annotedData.length;
+    setCurrentImageId(annotedData[previousIndex].id);
   };
 
   useEffect(() => {
     let height, width;
     let imageHeight;
-    imageToLoad.src = "https://i.ibb.co/2gb0zbx/Microsoft-Teams-image.jpg";
+    imageToLoad.src = currentImage.url;
 
-    console.log("heyyyyyyyy", imageToLoad.height);
-    // imageToLoad.addEventListener("load", () => {
-    //   imageHeight = imageToLoad.height;
-    // });
+    console.log("heyyyyyyyy", currentImage.url);
+    imageToLoad.addEventListener("load", () => {
+      imageHeight = imageToLoad.height;
+    });
     if (divRef.current) {
       height = divRef.current.offsetHeight;
       width = divRef.current.offsetWidth;
-      console.log("misery to be solve", imageToLoad.height, height);
-      if (imageToLoad.height < height) {
-        setHeight(imageToLoad.height);
-        setWidth(width);
-      } else {
-        setHeight(height);
-        setWidth(width);
-      }
+      // if (imageToLoad.height < height) {
+      //   setHeight(imageToLoad.height);
+      //   setWidth(width);
+      // } else {
+      //   setHeight(height);
+      //   setWidth(width);
+      // }
 
-      console.log("I cant sleep", height, width);
+      setHeight(height);
+      setWidth(width);
     }
-  }, [divRef, width, height]);
+  }, [divRef, width, height, currentImage.url, imageToLoad]);
 
   return (
     <>
@@ -84,9 +82,7 @@ function ZoomPinch() {
             >
               <div className="imageHeight" ref={divRef}>
                 <TransformComponent>
-                  {/* <Annotator image="https://i.ibb.co/2gb0zbx/Microsoft-Teams-image.jpg" /> */}
-
-                  <Annotate image="" width={width} height={height} />
+                  <Annotate data={currentImage} width={width} height={height} />
                 </TransformComponent>
 
                 <Box className="navigation">

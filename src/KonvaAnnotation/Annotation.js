@@ -1,17 +1,21 @@
-import React, { useEffect } from "react";
-import { Rect, Transformer } from "react-konva";
+import React, { useEffect, useState } from "react";
+import { Rect, Transformer, Group } from "react-konva";
+import { Popover, Typography } from "@material-ui/core";
+import Konva from "konva";
 
 const Annotation = ({
   shapeProps,
   isSelected,
   onSelect,
   onChange,
-  scale,
-  imageWidth,
-  imageHeight,
+  onOpenPopover,
+  onClick,
 }) => {
   const shapeRef = React.useRef();
   const transformRef = React.useRef();
+  const anchorRef = React.useRef();
+  const [anchorEl, setAnchorEl] = useState(null);
+  // console.log("shape props", shapeProps.id);
 
   useEffect(() => {
     if (isSelected) {
@@ -20,6 +24,10 @@ const Annotation = ({
       transformRef.current.getLayer().batchDraw();
     }
   }, [isSelected]);
+
+  useEffect(() => {
+    setTimeout(() => setAnchorEl(anchorRef?.current), 1);
+  }, [anchorRef]);
 
   const onMouseEnter = (event) => {
     event.target.getStage().container().style.cursor = "move";
@@ -30,22 +38,27 @@ const Annotation = ({
   };
 
   return (
-    <React.Fragment>
+    <Group>
       <Rect
         fill="transparent"
-        stroke="blue"
+        stroke="#C70039"
         onMouseDown={onSelect}
         ref={shapeRef}
         {...shapeProps}
         draggable
+        strokeWidth={1}
         onMouseEnter={onMouseEnter}
         onMouseLeave={onMouseLeave}
         onDragEnd={(event) => {
-          onChange({
-            ...shapeProps,
-            x: event.target.x(),
-            y: event.target.y(),
-          });
+          onChange(
+            {
+              ...shapeProps,
+              x: event.target.x(),
+              y: event.target.y(),
+            },
+            event
+          );
+          // onOpenPopover(event);
         }}
         onTransformEnd={(event) => {
           // transformer is changing scale of the node
@@ -59,18 +72,22 @@ const Annotation = ({
           // we will reset it back
           node.scaleX(1);
           node.scaleY(1);
-          onChange({
-            ...shapeProps,
-            x: node.x(),
-            y: node.y(),
-            // set minimal value
-            width: Math.max(5, node.width() * scaleX),
-            height: Math.max(node.height() * scaleY),
-          });
+          onChange(
+            {
+              ...shapeProps,
+              x: node.x(),
+              y: node.y(),
+              // set minimal value
+              width: Math.max(5, node.width() * scaleX),
+              height: Math.max(node.height() * scaleY),
+            },
+            event
+          );
+          // onOpenPopover(event);
         }}
       />
       {isSelected && <Transformer ref={transformRef} />}
-    </React.Fragment>
+    </Group>
   );
 };
 
