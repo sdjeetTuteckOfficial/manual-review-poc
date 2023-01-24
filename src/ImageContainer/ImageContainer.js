@@ -14,6 +14,7 @@ import { styled } from "@mui/material/styles";
 import { test } from "../Redux/action";
 function ZoomPinch() {
   const annotedData = useSelector((state) => state.ManualReviewReducers.data);
+  console.log("here annoted", annotedData);
   const divRef = useRef();
   const dispatch = useDispatch();
   const [width, setWidth] = useState();
@@ -21,7 +22,7 @@ function ZoomPinch() {
   const [currentImageId, setCurrentImageId] = useState(annotedData[0].id);
   const imageToLoad = new window.Image();
   const [scale, setScale] = useState(1);
-  const currentImage = annotedData.find((image) => image.id === currentImageId);
+  const currentImage = annotedData.find((image) => image.id == currentImageId);
 
   const nextImage = () => {
     const currentIndex = annotedData.findIndex(
@@ -66,6 +67,7 @@ function ZoomPinch() {
 
   return (
     <>
+      {console.log("annoted data", annotedData)}
       <TransformWrapper
         initialScale={1}
         initialPositionX={0}

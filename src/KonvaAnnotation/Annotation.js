@@ -46,6 +46,7 @@ const Annotation = ({
         ref={shapeRef}
         {...shapeProps}
         draggable
+        rotation={0}
         strokeWidth={1}
         onMouseEnter={onMouseEnter}
         onMouseLeave={onMouseLeave}
@@ -86,7 +87,7 @@ const Annotation = ({
           // onOpenPopover(event);
         }}
       />
-      {isSelected && <Transformer ref={transformRef} />}
+      {isSelected && <Transformer ref={transformRef} rotateEnabled={false} />}
     </Group>
   );
 };

@@ -16,6 +16,8 @@ import { Popover } from "@material-ui/core";
 import ImageFromUrl from "./ImageFromUrl";
 import Annotation from "./Annotation";
 import DeleteIcon from "@mui/icons-material/Delete";
+import { addNewCorordinates } from "../Redux/action";
+import { useDispatch } from "react-redux";
 // import AnnotateModal from "../AnnotateModal/AnnotateModal";
 import AnnotatePopup from "../AnnotatePopUp/AnnotatePopup";
 
@@ -23,15 +25,21 @@ const Annotate = (props) => {
   const [annotations, setAnnotations] = useState([]);
   const [newAnnotation, setNewAnnotation] = useState([]);
   const [selectedId, selectAnnotation] = useState(null);
+  const [widthRatioState, setWidthRatioState] = useState("");
+  const [heightRatioState, setHeightRatioState] = useState("");
   //modal
   const [openModal, setOpenModal] = useState(false);
   const [modalData, setModalData] = useState(null);
-  const [age, setAge] = useState("");
+  const [annotateLabel, setAnnotateLabel] = useState("");
+  const dispatch = useDispatch();
+  const [manualTextAnnotation, setManualTextAnnotation] = useState("");
 
   //////////this is MINE
   useEffect(() => {
     const widthRatio = props.width / props.data.width;
+    setWidthRatioState(widthRatio);
     const heightRatio = props.height / props.data.height;
+    setHeightRatioState(heightRatio);
     const initialAnnotations = props.data.fields.map((item) => {
       const width = item.coordinates.width * widthRatio;
       const height = item.coordinates.height * heightRatio;
@@ -48,7 +56,7 @@ const Annotate = (props) => {
     });
 
     setAnnotations(initialAnnotations);
-  }, [props.width, props.height, props.data]);
+  }, [props.width, props.height, props.data, newAnnotation]);
 
   const handleMouseDown = (event) => {
     if (selectedId === null && newAnnotation.length === 0) {
@@ -60,23 +68,25 @@ const Annotate = (props) => {
 
   const handleMouseMove = (event) => {
     if (selectedId === null && newAnnotation.length === 1) {
+      console.log("handleMouseMove");
       const sx = newAnnotation[0].x;
       const sy = newAnnotation[0].y;
       const { x, y } = event.target.getStage().getPointerPosition();
-      const id = uuidv4();
+      const co_id = uuidv4();
       setNewAnnotation([
         {
           x: sx,
           y: sy,
           width: x - sx,
           height: y - sy,
-          id,
+          co_id,
         },
       ]);
     }
   };
 
   const handleMouseUp = (event) => {
+    console.log("handleMouseUp");
     console.log("hii>>>", event);
     console.log("new annotation", newAnnotation);
     if (
@@ -86,24 +96,27 @@ const Annotate = (props) => {
     ) {
       console.log("new annotation", newAnnotation);
       annotations.push(...newAnnotation);
-      handleClick(event);
+
       setAnnotations(annotations);
       // setOpenModal(true);
-      setNewAnnotation([]);
+      handleClick(event);
     } else {
       setNewAnnotation([]);
     }
   };
 
   const handleMouseEnter = (event) => {
+    console.log("handleMouseEnter");
+    console.log("handleMouseEnter events ", event);
     event.target.getStage().container().style.cursor = "crosshair";
   };
 
   const handleKeyDown = (event) => {
+    console.log("handleKeyDown");
     if (event.keyCode === 8 || event.keyCode === 46) {
       if (selectedId !== null) {
         const newAnnotations = annotations.filter(
-          (annotation) => annotation.id !== selectedId
+          (annotation) => annotation.co_id !== selectedId
         );
         setAnnotations(newAnnotations);
       }
@@ -139,6 +152,24 @@ const Annotate = (props) => {
 
   const handleClose = () => {
     setAnchorEl(null);
+  };
+
+  const handleSaveAnnotation = () => {
+    const savedAnnotation = newAnnotation[0];
+    dispatch(
+      addNewCorordinates(
+        {
+          ...savedAnnotation,
+          text: manualTextAnnotation,
+          keyName: annotateLabel,
+          widthRatio: widthRatioState,
+          heightRatio: heightRatioState,
+        },
+        props.data.id
+      )
+    );
+    setAnchorEl(null);
+    setNewAnnotation([]);
   };
 
   return (
@@ -205,6 +236,7 @@ const Annotate = (props) => {
             variant="outlined"
             size="small"
             fullWidth
+            onChange={(e) => setManualTextAnnotation(e.target.value)}
           />
           <FormControl fullWidth sx={{ mt: 2 }}>
             <InputLabel id="demo-simple-select-label" size="small" fullWidth>
@@ -213,9 +245,9 @@ const Annotate = (props) => {
             <Select
               labelId="demo-simple-select-label"
               id="demo-simple-select"
-              value={age}
-              label="Age"
-              onChange={(e) => setAge(e.target.value)}
+              value={annotateLabel}
+              label="Annotate Label"
+              onChange={(e) => setAnnotateLabel(e.target.value)}
               size="small"
             >
               <MenuItem value={10}>Name</MenuItem>
@@ -228,7 +260,7 @@ const Annotate = (props) => {
           <IconButton color="primary" aria-label="delete" component="label">
             <DeleteIcon />
           </IconButton>
-          <Button onClick={() => {}} variant="contained">
+          <Button onClick={handleSaveAnnotation} variant="contained">
             Save
           </Button>
         </Grid>

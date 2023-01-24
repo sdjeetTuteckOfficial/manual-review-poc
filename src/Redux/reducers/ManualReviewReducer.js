@@ -80,14 +80,51 @@ const ManualReviewReducers = (state = initialData, action) => {
         test: data,
       };
 
-    case "ADD_FIELDS":
-      const { values, id } = action.payload;
-      const selectedFile = state.data.find((file) => file.id === id);
-      console.log("selected file", selectedFile);
-
-      return {
-        ...state,
+    case "ADD_COORDINATES":
+      const values = action.payload;
+      console.log("bro I am here", values.data);
+      const coordObj = {
+        height: values.data.height / values.data.heightRatio,
+        width: values.data.width / values.data.widthRatio,
+        x: values.data.x / values.data.widthRatio,
+        y: values.data.y / values.data.heightRatio,
+        co_id: values.data.co_id,
       };
+      const fieldData = {
+        co_id: values.data.co_id,
+        name: values.data.keyName,
+        value: values.data.text,
+        coordinates: coordObj,
+      };
+      console.log("filedData", fieldData);
+
+      for (let i = 0; i < state.data.length; i++) {
+        if (state.data[i].id === values.imageId) {
+          // console.log("hello", state.data[i].fields);
+          //for existing ones update
+          if (state.data[i].fields.co_id === values.data.co_id) {
+            const filteredData = state.data[i].fields.filter(
+              (item) => item.co_id === values.data.co_id
+            );
+            filteredData.push(fieldData);
+            state.data[i].fields.push(filteredData);
+          }
+          //for push new data
+          else state.data[i].fields.push(fieldData);
+          return state;
+        }
+      }
+      break;
+    // if(state.data.find())
+
+    //replace the image obj
+
+    // console.log("why??", newArray);
+    // console.log("ok fine", newArray);
+    // const selectedAnnotation = state.data.
+    // const selectedFile = state.data.find((file) => file.id === id);
+    // console.log("selected file", selectedFile);
+
     default:
       return state;
   }
