@@ -56,7 +56,7 @@ const Annotate = (props) => {
 
   //////////this is MINE
   useEffect(() => {
-    console.log("props annotate", props);
+    console.log("wtf");
     const widthRatio = props.width / props.data.width;
     setWidthRatioState(widthRatio);
     const heightRatio = props.height / props.data.height;

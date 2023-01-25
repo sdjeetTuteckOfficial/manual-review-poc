@@ -1,3 +1,4 @@
+import { v4 as uuidv4 } from "uuid";
 const initialData = {
   test: "1234",
   data: [
@@ -83,15 +84,16 @@ const ManualReviewReducers = (state = initialData, action) => {
     case "ADD_COORDINATES":
       const values = action.payload;
       console.log("bro I am here", values.data);
+      const co_id = uuidv4();
       const coordObj = {
         height: values.data.height / values.data.heightRatio,
         width: values.data.width / values.data.widthRatio,
         x: values.data.x / values.data.widthRatio,
         y: values.data.y / values.data.heightRatio,
-        co_id: values.co_id,
+        co_id: co_id,
       };
       const fieldData = {
-        co_id: values.co_id,
+        co_id: co_id,
         name: values.data.keyName,
         value: values.data.text,
         coordinates: coordObj,
@@ -141,24 +143,6 @@ const ManualReviewReducers = (state = initialData, action) => {
       });
 
       return state;
-      // for (let i = 0; i < state.data.length; i++) {
-      //   if (state.data[i].id === editValues.imageId) {
-      //     for (let y = 0; y < state.data[i].fields.length; y++) {
-      //       console.log("hello edit", state.data[i], state.data[i].fields[y]);
-      //       if (state.data[i].fields[y].co_id === editValues.data.co_id) {
-      //         const filteredData = state.data[i].fields.filter(
-      //           (item) => item.co_id === editValues.data.co_id
-      //         );
-      //         console.log(filteredData);
-      //         const modifiedData = [filteredData, fieldDataEdit];
-      //         // state.data[i].fields.push(fieldDataEdit);
-      //       }
-      //     }
-      //     // return state;
-      //   }
-      // }
-
-      break;
 
     default:
       return state;
