@@ -25,9 +25,9 @@ const Annotation = ({
     }
   }, [isSelected]);
 
-  useEffect(() => {
-    setTimeout(() => setAnchorEl(anchorRef?.current), 1);
-  }, [anchorRef]);
+  // useEffect(() => {
+  //   setTimeout(() => setAnchorEl(anchorRef?.current), 1);
+  // }, [anchorRef]);
 
   const onMouseEnter = (event) => {
     event.target.getStage().container().style.cursor = "move";

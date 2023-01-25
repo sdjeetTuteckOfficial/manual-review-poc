@@ -18,3 +18,14 @@ export const addNewCorordinates = (data, imageId) => {
     },
   };
 };
+
+export const editNewCoordinates = (data, imageId) => {
+  console.log("edit action", data);
+  return {
+    type: "EDIT_COORDINATE",
+    payload: {
+      data: data,
+      imageId: imageId,
+    },
+  };
+};

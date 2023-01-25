@@ -88,10 +88,10 @@ const ManualReviewReducers = (state = initialData, action) => {
         width: values.data.width / values.data.widthRatio,
         x: values.data.x / values.data.widthRatio,
         y: values.data.y / values.data.heightRatio,
-        co_id: values.data.co_id,
+        co_id: values.co_id,
       };
       const fieldData = {
-        co_id: values.data.co_id,
+        co_id: values.co_id,
         name: values.data.keyName,
         value: values.data.text,
         coordinates: coordObj,
@@ -100,30 +100,65 @@ const ManualReviewReducers = (state = initialData, action) => {
 
       for (let i = 0; i < state.data.length; i++) {
         if (state.data[i].id === values.imageId) {
-          // console.log("hello", state.data[i].fields);
-          //for existing ones update
-          if (state.data[i].fields.co_id === values.data.co_id) {
-            const filteredData = state.data[i].fields.filter(
-              (item) => item.co_id === values.data.co_id
-            );
-            filteredData.push(fieldData);
-            state.data[i].fields.push(filteredData);
-          }
-          //for push new data
-          else state.data[i].fields.push(fieldData);
+          state.data[i].fields.push(fieldData);
           return state;
         }
       }
       break;
-    // if(state.data.find())
 
-    //replace the image obj
+    case "EDIT_COORDINATE":
+      const editValues = action.payload;
+      console.log("edit reducer", editValues);
+      const coordObjEdit = {
+        height: editValues.data.height / editValues.data.heightRatio,
+        width: editValues.data.width / editValues.data.widthRatio,
+        x: editValues.data.x / editValues.data.widthRatio,
+        y: editValues.data.y / editValues.data.heightRatio,
+        co_id: editValues.data.co_id,
+      };
 
-    // console.log("why??", newArray);
-    // console.log("ok fine", newArray);
-    // const selectedAnnotation = state.data.
-    // const selectedFile = state.data.find((file) => file.id === id);
-    // console.log("selected file", selectedFile);
+      const fieldDataEdit = {
+        co_id: editValues.data.co_id,
+        name: editValues.data.keyName,
+        value: editValues.data.text,
+        coordinates: coordObjEdit,
+      };
+      console.log("filedData", fieldDataEdit);
+
+      state.data.map((currState) => {
+        if (currState.id === editValues.imageId) {
+          const index = currState.fields.findIndex(
+            (item) => editValues.data.co_id === item.co_id
+          );
+          console.log("index", index);
+          if (index !== -1) {
+            currState.fields.splice(index, 1);
+            console.log("cur state", currState);
+          }
+          currState.fields.push(fieldDataEdit);
+          return state;
+        }
+      });
+
+      return state;
+      // for (let i = 0; i < state.data.length; i++) {
+      //   if (state.data[i].id === editValues.imageId) {
+      //     for (let y = 0; y < state.data[i].fields.length; y++) {
+      //       console.log("hello edit", state.data[i], state.data[i].fields[y]);
+      //       if (state.data[i].fields[y].co_id === editValues.data.co_id) {
+      //         const filteredData = state.data[i].fields.filter(
+      //           (item) => item.co_id === editValues.data.co_id
+      //         );
+      //         console.log(filteredData);
+      //         const modifiedData = [filteredData, fieldDataEdit];
+      //         // state.data[i].fields.push(fieldDataEdit);
+      //       }
+      //     }
+      //     // return state;
+      //   }
+      // }
+
+      break;
 
     default:
       return state;
