@@ -11,7 +11,7 @@ const initialData = {
         {
           co_id: 1234,
           value: "Chiranjit Sen",
-          name: "Name",
+          name: 10,
           coordinates: {
             co_id: 1234,
             x: 608,
@@ -23,7 +23,7 @@ const initialData = {
         {
           co_id: 1331,
           value: "Anil Sen",
-          name: "Fathers Name",
+          name: 20,
           coordinates: {
             co_id: 1331,
             x: 608,
@@ -44,25 +44,25 @@ const initialData = {
         {
           co_id: 1444,
           value: "IDOCUSENSE",
-          name: "jo bhi hai",
+          name: 20,
           coordinates: {
             x: 55,
             y: 91,
             width: 66,
             height: 22,
-            id: 1444,
+            co_id: 1444,
           },
         },
         {
           co_id: 1290,
           value: "123456789012",
-          name: "Voter id",
+          name: 20,
           coordinates: {
             x: 72,
             y: 188,
             width: 33,
             height: 28,
-            id: 1290,
+            co_id: 1290,
           },
         },
       ],

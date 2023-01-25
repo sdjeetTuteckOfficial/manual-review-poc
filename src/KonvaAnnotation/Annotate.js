@@ -31,6 +31,28 @@ const Annotate = (props) => {
   const [edittedAnnotation, setEdittedAnnotation] = useState([]);
   const dispatch = useDispatch();
   const [manualTextAnnotation, setManualTextAnnotation] = useState("");
+  const masterData = [
+    {
+      name: "First Name",
+      value: 10,
+    },
+    {
+      name: "Last Name",
+      value: 20,
+    },
+    {
+      name: "Age",
+      value: 30,
+    },
+    {
+      name: "Gender",
+      value: 40,
+    },
+    {
+      name: "Id",
+      value: 50,
+    },
+  ];
 
   //////////this is MINE
   useEffect(() => {
@@ -142,7 +164,9 @@ const Annotate = (props) => {
     const keyPair = props.data.fields.find(
       (item) => item.co_id === annotation.co_id
     );
+    console.log("aafat", keyPair);
     if (keyPair) {
+      setAnnotateLabel(keyPair.name);
       setManualTextAnnotation(keyPair.value);
       edittedAnnotation.push(annotation);
     }
@@ -181,7 +205,10 @@ const Annotate = (props) => {
         )
       );
       setAnchorEl(null);
+      setManualTextAnnotation("");
+      setAnnotateLabel(null);
       setNewAnnotation([]);
+      setEdittedAnnotation([]);
     } else {
       console.log("fire");
       const newValues = {
@@ -193,7 +220,10 @@ const Annotate = (props) => {
       };
       dispatch(editNewCoordinates(newValues, props.data.id));
       setAnchorEl(null);
+      setManualTextAnnotation("");
+      setAnnotateLabel(null);
       setNewAnnotation([]);
+      setEdittedAnnotation([]);
     }
   };
 
@@ -280,9 +310,9 @@ const Annotate = (props) => {
               onChange={(e) => setAnnotateLabel(e.target.value)}
               size="small"
             >
-              <MenuItem value={10}>Name</MenuItem>
-              <MenuItem value={20}>Id</MenuItem>
-              <MenuItem value={30}>Mereko utha le re baba!</MenuItem>
+              {masterData.map((item) => (
+                <MenuItem value={item.value}>{item.name}</MenuItem>
+              ))}
             </Select>
           </FormControl>
         </Grid>
