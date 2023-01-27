@@ -2,7 +2,7 @@ import "./App.css";
 import { Grid } from "@mui/material";
 import ZoomPinch from "./ImageContainer/ImageContainer";
 import { useSelector } from "react-redux";
-import { Content } from "./Content/Content";
+import Content from "./Content/Content";
 import PopoverPopupState from "./AnnotatePopUp/AnnotatePopup";
 
 function App() {
@@ -12,10 +12,10 @@ function App() {
     <div>
       {/* <PopoverPopupState /> */}
       <Grid container>
-        <Grid item md={6}>
+        <Grid item md={8}>
           <ZoomPinch />
         </Grid>
-        <Grid item md={6}>
+        <Grid item md={4} sx={{ borderLeft: "2px solid beige" }}>
           <Content />
         </Grid>
       </Grid>

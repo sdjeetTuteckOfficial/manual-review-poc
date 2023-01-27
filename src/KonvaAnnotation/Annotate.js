@@ -18,7 +18,6 @@ import Annotation from "./Annotation";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { addNewCorordinates, editNewCoordinates } from "../Redux/action";
 import { useDispatch } from "react-redux";
-// import AnnotateModal from "../AnnotateModal/AnnotateModal";
 import AnnotatePopup from "../AnnotatePopUp/AnnotatePopup";
 
 const Annotate = ({
