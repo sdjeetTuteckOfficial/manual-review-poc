@@ -39,6 +39,8 @@ const Annotate = ({
   const [edittedAnnotation, setEdittedAnnotation] = useState([]);
   const dispatch = useDispatch();
   const [manualTextAnnotation, setManualTextAnnotation] = useState("");
+
+  // const refreshedAnnotations = annotations;
   const masterData = [
     {
       name: "First Name",
@@ -189,6 +191,11 @@ const Annotate = ({
     setAnnotateLabel(null);
     setNewAnnotation([]);
     setEdittedAnnotation([]);
+    const myArray = annotations.filter((obj) => obj.hasOwnProperty("co_id"));
+    console.log("pink floyd ", myArray);
+    handleAnnotations(myArray);
+
+    // handleAnnotations(refreshedAnnotations);
   };
 
   const handleSaveAnnotation = () => {
