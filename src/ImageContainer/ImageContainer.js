@@ -11,9 +11,12 @@ import arrowRight from "../assets/arrowrt.svg";
 import Annotate from "../KonvaAnnotation/Annotate";
 import { useDispatch, useSelector } from "react-redux";
 import { styled } from "@mui/material/styles";
-import { test } from "../Redux/action";
+import { activeFlagFalse } from "../Redux/action";
 function ZoomPinch() {
   const annotedData = useSelector((state) => state.ManualReviewReducers.data);
+  const activeFlag = useSelector(
+    (state) => state.ManualReviewReducers.activeFlag
+  );
   console.log("here annoted", annotedData);
   const divRef = useRef();
   const dispatch = useDispatch();
@@ -25,7 +28,7 @@ function ZoomPinch() {
   const [heightRatioState, setHeightRatioState] = useState("");
 
   const [scale, setScale] = useState(1);
-  const currentImage = annotedData.find((image) => image.id == currentImageId);
+  const currentImage = annotedData.find((image) => image.id === currentImageId);
 
   const nextImage = () => {
     const currentIndex = annotedData.findIndex(
@@ -44,12 +47,13 @@ function ZoomPinch() {
   };
 
   useEffect(() => {
+    console.log("active flag", activeFlag);
     let height, width;
     let imageHeight;
     const imageToLoad = new window.Image();
     imageToLoad.src = currentImage.url;
 
-    console.log("heyyyyyyyy", currentImage.url);
+    console.log("heyyyyyyyy", currentImage);
     imageToLoad.addEventListener("load", () => {
       imageHeight = imageToLoad.height;
     });
@@ -86,6 +90,7 @@ function ZoomPinch() {
       });
 
       setAnnotations(initialAnnotations);
+      activeFlagFalse(false);
     }
   }, [
     divRef,
@@ -96,6 +101,7 @@ function ZoomPinch() {
     currentImage.fields,
     currentImage.width,
     currentImage.height,
+    activeFlag,
   ]);
 
   const handleAnnotations = (val) => {
@@ -195,9 +201,6 @@ function ZoomPinch() {
                         <img src={center} alt="center" />
                       </IconButton>
                     </div>
-                    {/* <Button onClick={() => dispatch(test("hiiiiiiiiiiiii"))}>
-                      Redux😎
-                    </Button> */}
                   </Grid>
                 </Grid>
                 <Grid item md={4}>

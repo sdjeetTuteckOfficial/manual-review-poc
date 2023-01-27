@@ -1,6 +1,7 @@
 import { v4 as uuidv4 } from "uuid";
 const initialData = {
   test: "1234",
+  activeFlag: false,
   data: [
     {
       id: 1,
@@ -81,6 +82,13 @@ const ManualReviewReducers = (state = initialData, action) => {
         test: data,
       };
 
+    case "ACTIVE_FLAG_FALSE":
+      const { flag } = action.payload;
+      return {
+        ...state,
+        activeFlag: flag,
+      };
+
     case "ADD_COORDINATES":
       const values = action.payload;
       console.log("bro I am here", values.data);
@@ -103,7 +111,11 @@ const ManualReviewReducers = (state = initialData, action) => {
       for (let i = 0; i < state.data.length; i++) {
         if (state.data[i].id === values.imageId) {
           state.data[i].fields.push(fieldData);
-          return state;
+          state.activeFlag = true;
+          return {
+            ...state,
+            activeFlag: true,
+          };
         }
       }
       break;
@@ -138,11 +150,18 @@ const ManualReviewReducers = (state = initialData, action) => {
             console.log("cur state", currState);
           }
           currState.fields.push(fieldDataEdit);
-          return state;
+
+          return {
+            ...state,
+            activeFlag: true,
+          };
         }
       });
 
-      return state;
+      return {
+        ...state,
+        activeFlag: true,
+      };
 
     default:
       return state;

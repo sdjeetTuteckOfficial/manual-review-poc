@@ -29,3 +29,12 @@ export const editNewCoordinates = (data, imageId) => {
     },
   };
 };
+
+export const activeFlagFalse = (val) => {
+  return {
+    type: "ACTIVE_FLAG_FALSE",
+    payload: {
+      flag: val,
+    },
+  };
+};
