@@ -20,7 +20,10 @@ function ZoomPinch() {
   const [width, setWidth] = useState();
   const [height, setHeight] = useState();
   const [currentImageId, setCurrentImageId] = useState(annotedData[0].id);
-  const imageToLoad = new window.Image();
+  const [annotations, setAnnotations] = useState([]);
+  const [widthRatioState, setWidthRatioState] = useState("");
+  const [heightRatioState, setHeightRatioState] = useState("");
+
   const [scale, setScale] = useState(1);
   const currentImage = annotedData.find((image) => image.id == currentImageId);
 
@@ -43,6 +46,7 @@ function ZoomPinch() {
   useEffect(() => {
     let height, width;
     let imageHeight;
+    const imageToLoad = new window.Image();
     imageToLoad.src = currentImage.url;
 
     console.log("heyyyyyyyy", currentImage.url);
@@ -62,8 +66,41 @@ function ZoomPinch() {
 
       setHeight(height);
       setWidth(width);
+      const widthRatio = width / currentImage.width;
+      setWidthRatioState(widthRatio);
+      const heightRatio = height / currentImage.height;
+      setHeightRatioState(heightRatio);
+      const initialAnnotations = currentImage.fields.map((item) => {
+        const width = item.coordinates.width * widthRatio;
+        const height = item.coordinates.height * heightRatio;
+        const x = item.coordinates.x * widthRatio;
+        const y = item.coordinates.y * heightRatio;
+        const co_id = item.coordinates.co_id;
+        return {
+          width,
+          height,
+          x,
+          y,
+          co_id,
+        };
+      });
+
+      setAnnotations(initialAnnotations);
     }
-  }, [divRef, width, height, currentImage.url, imageToLoad]);
+  }, [
+    divRef,
+    width,
+    height,
+    currentImage.url,
+    // imageToLoad,
+    currentImage.fields,
+    currentImage.width,
+    currentImage.height,
+  ]);
+
+  const handleAnnotations = (val) => {
+    setAnnotations(val);
+  };
 
   return (
     <>
@@ -84,7 +121,15 @@ function ZoomPinch() {
             >
               <div className="imageHeight" ref={divRef}>
                 <TransformComponent>
-                  <Annotate data={currentImage} width={width} height={height} />
+                  <Annotate
+                    data={currentImage}
+                    width={width}
+                    height={height}
+                    annotations={annotations}
+                    widthRatioState={widthRatioState}
+                    heightRatioState={heightRatioState}
+                    handleAnnotations={handleAnnotations}
+                  />
                 </TransformComponent>
 
                 <Box className="navigation">

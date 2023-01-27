@@ -21,12 +21,20 @@ import { useDispatch } from "react-redux";
 // import AnnotateModal from "../AnnotateModal/AnnotateModal";
 import AnnotatePopup from "../AnnotatePopUp/AnnotatePopup";
 
-const Annotate = (props) => {
-  const [annotations, setAnnotations] = useState([]);
+const Annotate = ({
+  handleAnnotations,
+  heightRatioState,
+  widthRatioState,
+  width,
+  height,
+  data,
+  annotations,
+}) => {
+  // const [annotations, setAnnotations] = useState([]); /////////////////////////////
   const [newAnnotation, setNewAnnotation] = useState([]);
   const [selectedId, selectAnnotation] = useState(null);
-  const [widthRatioState, setWidthRatioState] = useState("");
-  const [heightRatioState, setHeightRatioState] = useState("");
+  // const [widthRatioState, setWidthRatioState] = useState(""); ////////////////////////
+  // const [heightRatioState, setHeightRatioState] = useState(""); /////////////////////
   const [annotateLabel, setAnnotateLabel] = useState("");
   const [edittedAnnotation, setEdittedAnnotation] = useState([]);
   const dispatch = useDispatch();
@@ -55,41 +63,39 @@ const Annotate = (props) => {
   ];
 
   //////////this is MINE
-  useEffect(() => {
-    console.log("wtf");
-    const widthRatio = props.width / props.data.width;
-    setWidthRatioState(widthRatio);
-    const heightRatio = props.height / props.data.height;
-    setHeightRatioState(heightRatio);
-    const initialAnnotations = props.data.fields.map((item) => {
-      const width = item.coordinates.width * widthRatio;
-      const height = item.coordinates.height * heightRatio;
-      const x = item.coordinates.x * widthRatio;
-      const y = item.coordinates.y * heightRatio;
-      const co_id = item.coordinates.co_id;
-      return {
-        width,
-        height,
-        x,
-        y,
-        co_id,
-      };
-    });
+  // useEffect(() => {
+  //   console.log("wtf");
+  //   const widthRatio = props.width / props.data.width;
+  //   setWidthRatioState(widthRatio);
+  //   const heightRatio = props.height / props.data.height;
+  //   setHeightRatioState(heightRatio);
+  //   const initialAnnotations = props.data.fields.map((item) => {
+  //     const width = item.coordinates.width * widthRatio;
+  //     const height = item.coordinates.height * heightRatio;
+  //     const x = item.coordinates.x * widthRatio;
+  //     const y = item.coordinates.y * heightRatio;
+  //     const co_id = item.coordinates.co_id;
+  //     return {
+  //       width,
+  //       height,
+  //       x,
+  //       y,
+  //       co_id,
+  //     };
+  //   });
 
-    setAnnotations(initialAnnotations);
-  }, [props, newAnnotation]);
-
+  //   setAnnotations(initialAnnotations);
+  // }, [props, newAnnotation]);
   const handleMouseDown = (event) => {
     if (selectedId === null && newAnnotation.length === 0) {
       const { x, y } = event.target.getStage().getPointerPosition();
-      // const id = uuidv4();
+      console.log("right here down");
       setNewAnnotation([
         {
           x,
           y,
           width: 0,
           height: 0,
-          // id
         },
       ]);
     }
@@ -100,35 +106,28 @@ const Annotate = (props) => {
       console.log("handleMouseMove");
       const sx = newAnnotation[0].x;
       const sy = newAnnotation[0].y;
+
+      console.log("right here", sx, sy);
       const { x, y } = event.target.getStage().getPointerPosition();
-      // const co_id = uuidv4();
       setNewAnnotation([
         {
           x: sx,
           y: sy,
           width: x - sx,
           height: y - sy,
-          // co_id,
         },
       ]);
     }
   };
 
   const handleMouseUp = (event) => {
-    // console.log("handleMouseUp");
-    // console.log("hii>>>", event);
-    // console.log("new annotation", newAnnotation);
-    // console.log("lets see", selectedId);
     if (
       selectedId === null &&
       newAnnotation.length === 1 &&
       newAnnotation[0].width > 0
     ) {
-      console.log("new annotation", newAnnotation);
       annotations.push(...newAnnotation);
-
-      setAnnotations(annotations);
-      // setOpenModal(true);
+      handleAnnotations(annotations);
       handleClick(event, newAnnotation);
     } else {
       setNewAnnotation([]);
@@ -136,7 +135,6 @@ const Annotate = (props) => {
   };
 
   const handleMouseEnter = (event) => {
-    //dont do anything here
     event.target.getStage().container().style.cursor = "crosshair";
   };
 
@@ -158,24 +156,32 @@ const Annotate = (props) => {
   const open = Boolean(anchorEl);
   const id = open ? "simple-popover" : undefined;
 
-  const handleClick = (event, annotation) => {
+  const handleClick = (event, annotation, rects) => {
     console.log("handle click>>>", event, annotation);
-
-    const keyPair = props.data.fields.find(
-      (item) => item.co_id === annotation.co_id
-    );
-    console.log("aafat", keyPair);
-    if (keyPair) {
+    console.log("right now", annotation, rects);
+    if (annotation?.co_id) {
+      const keyPair = data.fields.find(
+        (item) => item.co_id === annotation.co_id
+      );
+      const obj = rects.find((item) => item.co_id === annotation.co_id);
       setAnnotateLabel(keyPair.name);
       setManualTextAnnotation(keyPair.value);
-      edittedAnnotation.push(annotation);
+      setEdittedAnnotation(obj);
     }
     setAnchorEl(event.currentTarget);
   };
 
-  // useEffect(() => {
-
-  // }, [open, anchorEl, manualTextAnnotation]);
+  const handleSelect = (event, annotation, id) => {
+    if (id) {
+      const keyPair = data.fields.find(
+        (item) => item.co_id === annotation.co_id
+      );
+      setAnnotateLabel(keyPair.name);
+      setManualTextAnnotation(keyPair.value);
+      setEdittedAnnotation(annotation);
+    }
+    setAnchorEl(event.currentTarget);
+  };
 
   const handleClose = () => {
     setAnchorEl(null);
@@ -186,6 +192,7 @@ const Annotate = (props) => {
   };
 
   const handleSaveAnnotation = () => {
+    console.log("NEW ANNOTATION", newAnnotation);
     const savedAnnotation = newAnnotation[0];
     console.log("editted annotation", edittedAnnotation);
     console.log("saved annotation", savedAnnotation);
@@ -201,7 +208,7 @@ const Annotate = (props) => {
             heightRatio: heightRatioState,
             co_id: id,
           },
-          props.data.id
+          data.id
         )
       );
       setAnchorEl(null);
@@ -212,13 +219,13 @@ const Annotate = (props) => {
     } else {
       console.log("fire");
       const newValues = {
-        ...edittedAnnotation[0],
+        ...edittedAnnotation,
         keyName: annotateLabel,
         widthRatio: widthRatioState,
         heightRatio: heightRatioState,
         text: manualTextAnnotation,
       };
-      dispatch(editNewCoordinates(newValues, props.data.id));
+      dispatch(editNewCoordinates(newValues, data.id));
       setAnchorEl(null);
       setManualTextAnnotation("");
       setAnnotateLabel(null);
@@ -232,12 +239,9 @@ const Annotate = (props) => {
       tabIndex={1}
       // onKeyDown={handleKeyDown}
     >
-      {/* <Button aria-describedby={id} variant="contained" onClick={handleClick}>
-        Open Popover
-      </Button> */}
       <Stage
-        width={props?.width}
-        height={props?.height}
+        width={width}
+        height={height}
         onMouseEnter={handleMouseEnter}
         onMouseDown={handleMouseDown}
         onMouseMove={handleMouseMove}
@@ -245,12 +249,12 @@ const Annotate = (props) => {
       >
         <Layer>
           <ImageFromUrl
-            imageUrl={props.data.url}
+            imageUrl={data.url}
             onMouseDown={() => {
               selectAnnotation(null);
             }}
-            width={props.width}
-            height={props.height}
+            width={width}
+            height={height}
           />
 
           {annotationsToDraw.map((annotation, i) => {
@@ -262,15 +266,17 @@ const Annotate = (props) => {
                 onSelect={(event) => {
                   console.log("here select");
                   selectAnnotation(annotation.co_id);
-                  handleClick(event, annotation, annotation.co_id);
+                  handleSelect(event, annotation, annotation.co_id);
                   // handleSelectedAnnotation(annotation);
                 }}
                 onChange={(newAttrs, event) => {
                   console.log("here drag");
                   const rects = annotations.slice();
                   rects[i] = newAttrs;
-                  handleClick(event, annotation);
-                  setAnnotations(rects);
+                  console.log("right here rect", rects);
+                  handleClick(event, annotation, rects);
+                  handleAnnotations(rects);
+                  // setAnnotations(rects);
                 }}
                 // onOpenPopover={(event) => handleClick(event)}
               />
@@ -310,8 +316,10 @@ const Annotate = (props) => {
               onChange={(e) => setAnnotateLabel(e.target.value)}
               size="small"
             >
-              {masterData.map((item) => (
-                <MenuItem value={item.value}>{item.name}</MenuItem>
+              {masterData.map((item, index) => (
+                <MenuItem value={item.value} key={index}>
+                  {item.name}
+                </MenuItem>
               ))}
             </Select>
           </FormControl>
