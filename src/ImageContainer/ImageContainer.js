@@ -11,9 +11,12 @@ import arrowRight from "../assets/arrowrt.svg";
 import Annotate from "../KonvaAnnotation/Annotate";
 import { useDispatch, useSelector } from "react-redux";
 import { styled } from "@mui/material/styles";
-import { activeFlagFalse } from "../Redux/action";
+import { activeFlagFalse, changeImageIndex } from "../Redux/action";
 function ZoomPinch() {
   const annotedData = useSelector((state) => state.ManualReviewReducers.data);
+  const currentIndex = useSelector(
+    (state) => state.ManualReviewReducers.currentIndex
+  );
   const activeFlag = useSelector(
     (state) => state.ManualReviewReducers.activeFlag
   );
@@ -22,13 +25,13 @@ function ZoomPinch() {
   const dispatch = useDispatch();
   const [width, setWidth] = useState();
   const [height, setHeight] = useState();
-  const [currentImageId, setCurrentImageId] = useState(annotedData[0].id);
+  const [currentImageId, setCurrentImageId] = useState(currentIndex);
   const [annotations, setAnnotations] = useState([]);
   const [widthRatioState, setWidthRatioState] = useState("");
   const [heightRatioState, setHeightRatioState] = useState("");
+  const [currentImage, setCurrentImage] = useState("");
 
   const [scale, setScale] = useState(1);
-  const currentImage = annotedData.find((image) => image.id === currentImageId);
 
   const nextImage = () => {
     const currentIndex = annotedData.findIndex(
@@ -36,6 +39,7 @@ function ZoomPinch() {
     );
     const nextIndex = (currentIndex + 1) % annotedData.length;
     setCurrentImageId(annotedData[nextIndex].id);
+    dispatch(changeImageIndex(annotedData[nextIndex].id));
   };
   const previousImage = () => {
     const currentIndex = annotedData.findIndex(
@@ -44,14 +48,19 @@ function ZoomPinch() {
     const previousIndex =
       (currentIndex + annotedData.length - 1) % annotedData.length;
     setCurrentImageId(annotedData[previousIndex].id);
+    dispatch(changeImageIndex(annotedData[previousIndex].id));
   };
 
   useEffect(() => {
-    console.log("active flag", activeFlag);
+    const currentImage = annotedData.find(
+      (image) => image.id === currentImageId
+    );
+    setCurrentImage(currentImage);
+    // console.log("active flag", activeFlag);
     let height, width;
     let imageHeight;
     const imageToLoad = new window.Image();
-    imageToLoad.src = currentImage.url;
+    imageToLoad.src = currentImage?.url;
 
     console.log("heyyyyyyyy", currentImage);
     imageToLoad.addEventListener("load", () => {
@@ -72,9 +81,9 @@ function ZoomPinch() {
       setWidth(width);
       const widthRatio = width / currentImage.width;
       setWidthRatioState(widthRatio);
-      const heightRatio = height / currentImage.height;
+      const heightRatio = height / currentImage?.height;
       setHeightRatioState(heightRatio);
-      const initialAnnotations = currentImage.fields.map((item) => {
+      const initialAnnotations = currentImage?.fields.map((item) => {
         const width = item.coordinates.width * widthRatio;
         const height = item.coordinates.height * heightRatio;
         const x = item.coordinates.x * widthRatio;
@@ -96,12 +105,13 @@ function ZoomPinch() {
     divRef,
     width,
     height,
-    currentImage.url,
+    currentImage?.url,
     // imageToLoad,
-    currentImage.fields,
+    currentImage?.fields,
     currentImage.width,
     currentImage.height,
     activeFlag,
+    currentIndex,
   ]);
 
   const handleAnnotations = (val) => {
@@ -110,7 +120,6 @@ function ZoomPinch() {
 
   return (
     <>
-      {console.log("annoted data", annotedData)}
       <TransformWrapper
         initialScale={1}
         initialPositionX={0}

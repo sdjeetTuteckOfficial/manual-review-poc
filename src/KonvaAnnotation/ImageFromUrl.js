@@ -19,7 +19,6 @@ const ImageFromUrl = ({
     console.log("imageUrl", imageUrl);
     imageLoad.addEventListener("load", () => {
       setImage(imageLoad);
-      console.log("loggging");
     });
 
     return () => imageLoad.removeEventListener("load", null);

@@ -1,87 +1,19 @@
 import { v4 as uuidv4 } from "uuid";
 const initialData = {
-  test: "1234",
   activeFlag: false,
-  data: [
-    {
-      id: 1,
-      // url: "https://picsum.photos/id/1/200/300",
-      url: "https://i.ibb.co/2gb0zbx/Microsoft-Teams-image.jpg",
-      width: 2047,
-      height: 1394,
-      fields: [
-        {
-          co_id: 1234,
-          value: "Chiranjit Sen",
-          name: 10,
-          coordinates: {
-            co_id: 1234,
-            x: 608,
-            y: 377,
-            width: 496,
-            height: 121,
-          },
-        },
-        {
-          co_id: 1331,
-          value: "Anil Sen",
-          name: 20,
-          coordinates: {
-            co_id: 1331,
-            x: 608,
-            y: 536,
-            width: 811,
-            height: 134,
-          },
-        },
-      ],
-    },
-    {
-      id: 2,
-      // url: "https://picsum.photos/id/2/200/300",
-      url: "https://i.postimg.cc/3Rm46VRn/voter.jpg",
-      width: 236,
-      height: 314,
-      fields: [
-        {
-          co_id: 1444,
-          value: "IDOCUSENSE",
-          name: 20,
-          coordinates: {
-            x: 55,
-            y: 91,
-            width: 66,
-            height: 22,
-            co_id: 1444,
-          },
-        },
-        {
-          co_id: 1290,
-          value: "123456789012",
-          name: 20,
-          coordinates: {
-            x: 72,
-            y: 188,
-            width: 33,
-            height: 28,
-            co_id: 1290,
-          },
-        },
-      ],
-    },
-  ],
+  currentIndex: "",
+  data: [],
 };
 
 const ManualReviewReducers = (state = initialData, action) => {
   switch (action.type) {
-    case "TEST":
-      const { data } = action.payload;
-      console.log("inside hell", data);
+    case "LOAD_INITIAL_DATA":
+      const { data, initialIndex } = action.payload;
       return {
         ...state,
-        test: data,
+        data: data,
+        currentIndex: initialIndex,
       };
-
     case "ACTIVE_FLAG_FALSE":
       const { flag } = action.payload;
       return {
@@ -89,6 +21,12 @@ const ManualReviewReducers = (state = initialData, action) => {
         activeFlag: flag,
       };
 
+    case "CHANGE_IMAGE_INDEX":
+      const { index } = action.payload;
+      return {
+        ...state,
+        currentIndex: index,
+      };
     case "ADD_COORDINATES":
       const values = action.payload;
       console.log("bro I am here", values.data);
@@ -162,6 +100,30 @@ const ManualReviewReducers = (state = initialData, action) => {
         ...state,
         activeFlag: true,
       };
+
+    case "EDIT_VALUE":
+      const editedValue = action.payload;
+      console.log("edited redux", editedValue);
+
+      state.data.map((currState) => {
+        if (currState.id === editedValue.imageId) {
+          const index = currState.fields.findIndex(
+            (item) => editedValue.data.co_id === item.co_id
+          );
+          console.log("index", index);
+          if (index !== -1) {
+            currState.fields.splice(index, 1);
+            console.log("cur state", currState);
+          }
+          currState.fields.push(editedValue.data);
+
+          return {
+            ...state,
+            activeFlag: true,
+          };
+        }
+      });
+      break;
 
     default:
       return state;

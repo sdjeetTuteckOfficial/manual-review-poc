@@ -29,17 +29,13 @@ const Annotate = ({
   data,
   annotations,
 }) => {
-  // const [annotations, setAnnotations] = useState([]); /////////////////////////////
   const [newAnnotation, setNewAnnotation] = useState([]);
   const [selectedId, selectAnnotation] = useState(null);
-  // const [widthRatioState, setWidthRatioState] = useState(""); ////////////////////////
-  // const [heightRatioState, setHeightRatioState] = useState(""); /////////////////////
   const [annotateLabel, setAnnotateLabel] = useState("");
   const [edittedAnnotation, setEdittedAnnotation] = useState([]);
   const dispatch = useDispatch();
   const [manualTextAnnotation, setManualTextAnnotation] = useState("");
 
-  // const refreshedAnnotations = annotations;
   const masterData = [
     {
       name: "First Name",
@@ -158,8 +154,6 @@ const Annotate = ({
   const id = open ? "simple-popover" : undefined;
 
   const handleClick = (event, annotation, rects) => {
-    console.log("handle click>>>", event, annotation);
-    console.log("right now", annotation, rects);
     if (annotation?.co_id) {
       const keyPair = data.fields.find(
         (item) => item.co_id === annotation.co_id
@@ -263,23 +257,20 @@ const Annotate = ({
             height={height}
           />
 
-          {annotationsToDraw.map((annotation, i) => {
+          {annotationsToDraw?.map((annotation, i) => {
             return (
               <Annotation
                 key={i}
                 shapeProps={annotation}
                 isSelected={annotation.co_id === selectedId}
                 onSelect={(event) => {
-                  console.log("here select");
                   selectAnnotation(annotation.co_id);
                   handleSelect(event, annotation, annotation.co_id);
                   // handleSelectedAnnotation(annotation);
                 }}
                 onChange={(newAttrs, event) => {
-                  console.log("here drag");
                   const rects = annotations.slice();
                   rects[i] = newAttrs;
-                  console.log("right here rect", rects);
                   handleClick(event, annotation, rects);
                   handleAnnotations(rects);
                   // setAnnotations(rects);
