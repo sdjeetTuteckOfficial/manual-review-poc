@@ -17,7 +17,7 @@ const FinalResults = () => {
     (state) => state.ManualReviewReducers.activeFlag
   );
   useEffect(() => {
-    console.log("called", activeFlag, annotedData);
+    // console.log("called", activeFlag, annotedData);
   }, [annotedData, activeFlag, currentIndex]);
   console.log("current index", currentIndex);
   return (

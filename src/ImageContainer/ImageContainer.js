@@ -106,7 +106,7 @@ function ZoomPinch() {
     divRef,
     width,
     height,
-    currentImage?.url,
+    currentImage.url,
     annotedData,
     currentImageId,
     dispatch,

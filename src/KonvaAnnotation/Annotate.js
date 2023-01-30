@@ -126,6 +126,7 @@ const Annotate = ({
       annotations.push(...newAnnotation);
       handleAnnotations(annotations);
       handleClick(event, newAnnotation);
+      // setNewAnnotation([]);
     } else {
       setNewAnnotation([]);
     }

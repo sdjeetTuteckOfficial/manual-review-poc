@@ -3,6 +3,28 @@ const initialData = {
   activeFlag: false,
   currentIndex: "",
   data: [],
+  masterData: [
+    {
+      name: "First Name",
+      value: 10,
+    },
+    {
+      name: "Last Name",
+      value: 20,
+    },
+    {
+      name: "Age",
+      value: 30,
+    },
+    {
+      name: "Gender",
+      value: 40,
+    },
+    {
+      name: "Id",
+      value: 50,
+    },
+  ],
 };
 
 const ManualReviewReducers = (state = initialData, action) => {
