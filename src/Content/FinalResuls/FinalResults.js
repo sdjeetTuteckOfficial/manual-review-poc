@@ -18,8 +18,6 @@ const FinalResults = () => {
   );
   useEffect(() => {
     console.log("called", activeFlag, annotedData);
-
-    // setAnnotedDataState(annotedData);
   }, [annotedData, activeFlag, currentIndex]);
   console.log("current index", currentIndex);
   return (

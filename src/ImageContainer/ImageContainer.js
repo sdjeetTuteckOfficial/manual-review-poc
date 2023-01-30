@@ -57,6 +57,7 @@ function ZoomPinch() {
     );
     setCurrentImage(currentImage);
     // console.log("active flag", activeFlag);
+    console.log("active", activeFlag);
     let height, width;
     let imageHeight;
     const imageToLoad = new window.Image();
@@ -97,15 +98,18 @@ function ZoomPinch() {
           co_id,
         };
       });
-
+      console.log("executed");
       setAnnotations(initialAnnotations);
-      activeFlagFalse(false);
+      dispatch(activeFlagFalse());
     }
   }, [
     divRef,
     width,
     height,
     currentImage?.url,
+    annotedData,
+    currentImageId,
+    dispatch,
     // imageToLoad,
     currentImage?.fields,
     currentImage.width,

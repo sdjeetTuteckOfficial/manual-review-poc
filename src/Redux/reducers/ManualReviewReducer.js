@@ -15,10 +15,11 @@ const ManualReviewReducers = (state = initialData, action) => {
         currentIndex: initialIndex,
       };
     case "ACTIVE_FLAG_FALSE":
-      const { flag } = action.payload;
+      console.log("ACTIVE_FLAG_FALSE");
+      // const { flag } = action.payload;
       return {
         ...state,
-        activeFlag: flag,
+        activeFlag: false,
       };
 
     case "CHANGE_IMAGE_INDEX":
@@ -95,7 +96,7 @@ const ManualReviewReducers = (state = initialData, action) => {
           };
         }
       });
-
+      // break;
       return {
         ...state,
         activeFlag: true,
@@ -123,7 +124,11 @@ const ManualReviewReducers = (state = initialData, action) => {
           };
         }
       });
-      break;
+      return {
+        ...state,
+        activeFlag: true,
+      };
+    // break;
 
     default:
       return state;
