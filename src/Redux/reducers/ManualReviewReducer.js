@@ -150,6 +150,31 @@ const ManualReviewReducers = (state = initialData, action) => {
         ...state,
         activeFlag: true,
       };
+
+    case "DELETE_COORDINATE":
+      const delData = action.payload;
+
+      state.data.map((currState) => {
+        if (currState.id === delData.imageId) {
+          const index = currState.fields.findIndex(
+            (item) => delData.delId === item.co_id
+          );
+          console.log("index", index);
+          if (index !== -1) {
+            currState.fields.splice(index, 1);
+            console.log("cur state", currState);
+            return {
+              ...state,
+              activeFlag: true,
+            };
+          }
+        }
+      });
+      return {
+        ...state,
+        activeFlag: true,
+      };
+
     // break;
 
     default:

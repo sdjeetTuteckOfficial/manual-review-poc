@@ -1,10 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { TextField, Typography, IconButton, Grid } from "@mui/material";
 import SaveOutlinedIcon from "@mui/icons-material/SaveOutlined";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { editValue } from "../../Redux/action";
 
 const SingleAnnotation = ({ singleAnnotation, imageId }) => {
+  const masterData = useSelector(
+    (state) => state.ManualReviewReducers.masterData
+  );
+
+  const data = masterData.find((item) => item.value === singleAnnotation.name);
+  // console.log("data🤣", data);
+
   const [value, setValue] = useState(singleAnnotation.value);
 
   useEffect(() => {
@@ -23,13 +30,12 @@ const SingleAnnotation = ({ singleAnnotation, imageId }) => {
   return (
     <>
       <Typography sx={{ fontSize: "10px", pb: 1, pt: 1 }}>
-        {singleAnnotation.name}
+        {data.name}
       </Typography>
       <Grid container>
         <Grid item md={11}>
           <TextField
             id="outlined-basic"
-            label="Outlined"
             variant="outlined"
             fullWidth
             size="small"

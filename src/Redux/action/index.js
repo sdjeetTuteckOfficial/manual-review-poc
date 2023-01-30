@@ -54,3 +54,13 @@ export const editValue = (data, imageId) => {
     },
   };
 };
+
+export const deleteCoordinate = (delId, imageId) => {
+  return {
+    type: "DELETE_COORDINATE",
+    payload: {
+      delId: delId,
+      imageId: imageId,
+    },
+  };
+};

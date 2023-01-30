@@ -16,7 +16,11 @@ import { Popover } from "@material-ui/core";
 import ImageFromUrl from "./ImageFromUrl";
 import Annotation from "./Annotation";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { addNewCorordinates, editNewCoordinates } from "../Redux/action";
+import {
+  addNewCorordinates,
+  editNewCoordinates,
+  deleteCoordinate,
+} from "../Redux/action";
 import { useDispatch } from "react-redux";
 import AnnotatePopup from "../AnnotatePopUp/AnnotatePopup";
 
@@ -235,6 +239,28 @@ const Annotate = ({
     }
   };
 
+  const handleDelete = (edittedAnnotation) => {
+    console.log("delete click", edittedAnnotation);
+    if (edittedAnnotation.co_id) {
+      ///do something
+      console.log("click");
+      dispatch(deleteCoordinate(edittedAnnotation.co_id, data.id));
+      setAnchorEl(null);
+      setManualTextAnnotation("");
+      setAnnotateLabel(null);
+      setNewAnnotation([]);
+      setEdittedAnnotation([]);
+    } else {
+      const myArray = annotations.filter((obj) => obj.hasOwnProperty("co_id"));
+      handleAnnotations(myArray);
+      setAnchorEl(null);
+      setManualTextAnnotation("");
+      setAnnotateLabel(null);
+      setNewAnnotation([]);
+      setEdittedAnnotation([]);
+    }
+  };
+
   return (
     <div
       tabIndex={1}
@@ -323,7 +349,12 @@ const Annotate = ({
           </FormControl>
         </Grid>
         <Grid container justifyContent="space-between" sx={{ px: 3, py: 3 }}>
-          <IconButton color="primary" aria-label="delete" component="label">
+          <IconButton
+            color="primary"
+            aria-label="delete"
+            component="label"
+            onClick={() => handleDelete(edittedAnnotation)}
+          >
             <DeleteIcon />
           </IconButton>
           <Button onClick={handleSaveAnnotation} variant="contained">
