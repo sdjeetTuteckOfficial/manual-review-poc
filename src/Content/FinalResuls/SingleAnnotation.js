@@ -10,7 +10,6 @@ const SingleAnnotation = ({ singleAnnotation, imageId }) => {
   );
 
   const data = masterData.find((item) => item.value === singleAnnotation.name);
-  // console.log("data🤣", data);
 
   const [value, setValue] = useState(singleAnnotation.value);
 

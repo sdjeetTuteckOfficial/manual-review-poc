@@ -1,5 +1,6 @@
 import * as React from "react";
 import PropTypes from "prop-types";
+import { Grid, Button } from "@mui/material";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Typography from "@mui/material/Typography";
@@ -64,6 +65,16 @@ const Content = () => {
       <TabPanel value={value} index={1} sx={{ p: 0 }}>
         <JsonOutputData />
       </TabPanel>
+      <footer>
+        <Grid container justifyContent="right" sx={{ px: 2 }} spacing={1}>
+          <Grid item>
+            <Button variant="contained">Approve File</Button>
+          </Grid>
+          <Grid item>
+            <Button variant="contained">Reject File</Button>
+          </Grid>
+        </Grid>
+      </footer>
     </Box>
   );
 };

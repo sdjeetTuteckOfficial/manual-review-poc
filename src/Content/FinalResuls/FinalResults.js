@@ -48,14 +48,16 @@ const FinalResults = () => {
           <Typography>Manage Labels</Typography>
         </Grid>
       </Grid>
-      <Grid container sx={{ px: 2, pt: 2 }}>
-        {annotedData[currentIndex]?.fields.map((singleAnnotation) => (
-          <SingleAnnotation
-            singleAnnotation={singleAnnotation}
-            imageId={currentImageId}
-          />
-        ))}
-      </Grid>
+      <div style={{ height: "71vh", overflowY: "scroll" }}>
+        <Grid container sx={{ px: 2, pt: 2 }}>
+          {annotedData[currentIndex]?.fields.map((singleAnnotation) => (
+            <SingleAnnotation
+              singleAnnotation={singleAnnotation}
+              imageId={currentImageId}
+            />
+          ))}
+        </Grid>
+      </div>
     </>
   );
 };

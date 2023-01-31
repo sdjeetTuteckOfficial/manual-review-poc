@@ -88,10 +88,16 @@ function App() {
     <div>
       {/* <PopoverPopupState /> */}
       <Grid container>
-        <Grid item md={8}>
+        <Grid item xs={12} sm={12} md={8}>
           <ZoomPinch />
         </Grid>
-        <Grid item md={4} sx={{ borderLeft: "2px solid beige" }}>
+        <Grid
+          item
+          xs={12}
+          sm={12}
+          md={4}
+          sx={{ borderLeft: "2px solid beige" }}
+        >
           <Content />
         </Grid>
       </Grid>

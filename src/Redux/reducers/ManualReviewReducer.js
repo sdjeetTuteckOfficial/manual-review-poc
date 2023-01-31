@@ -55,10 +55,10 @@ const ManualReviewReducers = (state = initialData, action) => {
       console.log("bro I am here", values.data);
       const co_id = uuidv4();
       const coordObj = {
-        height: values.data.height / values.data.heightRatio,
-        width: values.data.width / values.data.widthRatio,
-        x: values.data.x / values.data.widthRatio,
-        y: values.data.y / values.data.heightRatio,
+        height: (values.data.height / values.data.heightRatio).toFixed(2),
+        width: (values.data.width / values.data.widthRatio).toFixed(2),
+        x: (values.data.x / values.data.widthRatio).toFixed(2),
+        y: (values.data.y / values.data.heightRatio).toFixed(2),
         co_id: co_id,
       };
       const fieldData = {
@@ -85,10 +85,12 @@ const ManualReviewReducers = (state = initialData, action) => {
       const editValues = action.payload;
       console.log("edit reducer", editValues);
       const coordObjEdit = {
-        height: editValues.data.height / editValues.data.heightRatio,
-        width: editValues.data.width / editValues.data.widthRatio,
-        x: editValues.data.x / editValues.data.widthRatio,
-        y: editValues.data.y / editValues.data.heightRatio,
+        height: (editValues.data.height / editValues.data.heightRatio).toFixed(
+          2
+        ),
+        width: (editValues.data.width / editValues.data.widthRatio).toFixed(2),
+        x: (editValues.data.x / editValues.data.widthRatio).toFixed(2),
+        y: (editValues.data.y / editValues.data.heightRatio).toFixed(2),
         co_id: editValues.data.co_id,
       };
 

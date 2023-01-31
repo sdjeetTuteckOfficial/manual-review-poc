@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;700&display=swap");
+
 .App {
   text-align: center;
 }
@@ -44,8 +46,8 @@
 
 .react-transform-component {
   justify-content: center;
-  min-width: 400px !important;
-  max-width: 400px !important;
+  min-width: 30vw !important; /*400px chilo agge*/
+  max-width: 30vw !important;
 }
 
 /* Next & previous buttons */
