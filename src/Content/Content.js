@@ -66,7 +66,12 @@ const Content = () => {
         <JsonOutputData />
       </TabPanel>
       <footer>
-        <Grid container justifyContent="right" sx={{ px: 2 }} spacing={1}>
+        <Grid
+          container
+          justifyContent="right"
+          sx={{ px: 2, pb: 2 }}
+          spacing={1}
+        >
           <Grid item>
             <Button variant="contained">Approve File</Button>
           </Grid>

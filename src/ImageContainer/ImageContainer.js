@@ -1,6 +1,6 @@
 import React, { useRef, useState, useEffect } from "react";
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
-import { Grid, IconButton, Button, Box } from "@mui/material";
+import { Grid, IconButton, Button, Box, Typography } from "@mui/material";
 import add from "../assets/add.svg";
 import substract from "../assets/substract.svg";
 import previous from "../assets/previous.svg";
@@ -30,7 +30,6 @@ function ZoomPinch() {
   const [widthRatioState, setWidthRatioState] = useState("");
   const [heightRatioState, setHeightRatioState] = useState("");
   const [currentImage, setCurrentImage] = useState("");
-
   const [scale, setScale] = useState(1);
 
   const nextImage = () => {
@@ -122,6 +121,19 @@ function ZoomPinch() {
     setAnnotations(val);
   };
 
+  const handleZoom = (scale) => {
+    console.log("huhuhu", scale.state.scale);
+    setScale(scale.state.scale);
+  };
+
+  useEffect(() => {
+    if (scale < 1) {
+      setScale(1);
+    } else if (scale > 6) {
+      setScale(6);
+    }
+  }, [scale]);
+
   return (
     <>
       <TransformWrapper
@@ -129,6 +141,7 @@ function ZoomPinch() {
         initialPositionX={0}
         initialPositionY={0}
         panning={{ disabled: true }}
+        onZoom={handleZoom}
       >
         {({ zoomIn, zoomOut, resetTransform, ...rest }) => (
           <React.Fragment>
@@ -193,23 +206,36 @@ function ZoomPinch() {
                         color="primary"
                         aria-label="zoom in"
                         component="label"
-                        onClick={() => zoomIn()}
+                        onClick={() => {
+                          zoomIn();
+                          setScale(scale + 1);
+                        }}
                       >
                         <img src={add} alt="plus" />
                       </IconButton>
+
+                      {parseInt(scale * 100)}
+
                       <IconButton
                         color="primary"
                         aria-label="zoom out"
                         component="label"
-                        onClick={() => zoomOut()}
+                        onClick={() => {
+                          zoomOut();
+                          setScale(scale - 1);
+                        }}
                       >
                         <img src={substract} alt="substract" />
                       </IconButton>
+
                       <IconButton
                         color="primary"
                         aria-label="xing"
                         component="label"
-                        onClick={() => resetTransform()}
+                        onClick={() => {
+                          resetTransform();
+                          setScale(1);
+                        }}
                       >
                         <img src={center} alt="center" />
                       </IconButton>
