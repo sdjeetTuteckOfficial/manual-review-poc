@@ -39,6 +39,7 @@ const Annotate = ({
   const [edittedAnnotation, setEdittedAnnotation] = useState([]);
   const dispatch = useDispatch();
   const [manualTextAnnotation, setManualTextAnnotation] = useState("");
+  const [newSavedAnnotation, setNewSavedAnnotaion] = useState("");
 
   const masterData = [
     {
@@ -130,7 +131,8 @@ const Annotate = ({
       annotations.push(...newAnnotation);
       handleAnnotations(annotations);
       handleClick(event, newAnnotation);
-      // setNewAnnotation([]);
+      setNewSavedAnnotaion(newAnnotation);
+      setNewAnnotation([]);
     } else {
       setNewAnnotation([]);
     }
@@ -198,7 +200,7 @@ const Annotate = ({
 
   const handleSaveAnnotation = () => {
     console.log("NEW ANNOTATION", newAnnotation);
-    const savedAnnotation = newAnnotation[0];
+    const savedAnnotation = newSavedAnnotation[0];
     console.log("editted annotation", edittedAnnotation);
     console.log("saved annotation", savedAnnotation);
     if (edittedAnnotation.length === 0) {
